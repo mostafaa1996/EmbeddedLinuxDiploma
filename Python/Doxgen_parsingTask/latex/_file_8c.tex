@@ -1,0 +1,253 @@
+\doxysection{File.\+c File Reference}
+\hypertarget{_file_8c}{}\label{_file_8c}\index{File.c@{File.c}}
+{\ttfamily \#include "{}Icu\+\_\+core.\+h"{}}\newline
+\begin{DoxyCompactItemize}
+\item 
+ICU\+\_\+str\+Icu\+Configs\+\_\+t \mbox{\hyperlink{_file_8c_a3272f9ccd5fa0575669f0043c8487e82}{str\+\_\+icu\+Cfg}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em Array of structures to configure the ICU Modules. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_file_8c_a89e59a002b7c391c30f5f7965b1658b6}{ICU\+\_\+\+Init}} (ICU\+\_\+\+Modules\+\_\+t en\+\_\+\+ICUModule)
+\begin{DoxyCompactList}\small\item\em Initialize the CCP Module as Input Capture Mode. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_file_8c_aa1c8c947bec2f69ece26e8dc75b04a01}{ICU\+\_\+\+Interrupt\+Handler\+Set}} (ICU\+\_\+en\+Icu\+Interrupt\+Mode\+\_\+t en\+\_\+icu\+Module\+Interrupt, void \texorpdfstring{$\ast$}{*}interrupt\+Handler)
+\begin{DoxyCompactList}\small\item\em Set interrupt handler for ICU Module. \end{DoxyCompactList}\item 
+uint8\+\_\+t \mbox{\hyperlink{_file_8c_aeb42825d9071ebfa3f75b2bb2e20ac5f}{ICU\+\_\+\+Overflow\+Interrupt\+Handler\+Set}} (ICU\+\_\+\+Modules\+\_\+t en\+\_\+\+ICUModule, void \texorpdfstring{$\ast$}{*}interrupt\+Handler)
+\begin{DoxyCompactList}\small\item\em Set interrupt handler for ICU Timer Module. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{_file_8c_a828e8f439991059b189e4a25a6aaaead}{ICU\+\_\+module\+Cfg}} (ICU\+\_\+\+Modules\+\_\+t en\+\_\+\+ICUModule)
+\begin{DoxyCompactList}\small\item\em ~\newline
+ \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{_file_8c_a89e59a002b7c391c30f5f7965b1658b6}\index{File.c@{File.c}!ICU\_Init@{ICU\_Init}}
+\index{ICU\_Init@{ICU\_Init}!File.c@{File.c}}
+\doxysubsubsection{\texorpdfstring{ICU\_Init()}{ICU\_Init()}}
+{\footnotesize\ttfamily \label{_file_8c_a89e59a002b7c391c30f5f7965b1658b6} 
+void ICU\+\_\+\+Init (\begin{DoxyParamCaption}\item[{ICU\+\_\+\+Modules\+\_\+t}]{en\+\_\+\+ICUModule}{}\end{DoxyParamCaption})}
+
+
+
+Initialize the CCP Module as Input Capture Mode. 
+
+\begin{DoxyPrecond}{Precondition}
+
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+
+\end{DoxyPostcond}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ICU\+\_\+\+Modules\+\_\+t} & en\+\_\+\+ICUModule \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+void
+\end{DoxyReturn}
+{\bfseries{Example\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\mbox{\hyperlink{_file_8c_a89e59a002b7c391c30f5f7965b1658b6}{ICU\_Init}}();}
+
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See also}
+Device datasheet
+\end{DoxySeeAlso}
+~\newline
+{\bfseries{ -\/ HISTORY OF CHANGES -\/ }}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+Date &Software Version &Initials  &Description  \\\cline{1-4}
+11.\+04.\+2021. 02\+:07\+:02 (UTC+01\+:00) &1.\+0.\+0 &YOUR\+\_\+\+INITIALS  &Interface Created  \\\cline{1-4}
+\end{longtabu}
+~\newline
+~\newline
+ \DoxyHorRuler{0}
+ \Hypertarget{_file_8c_aa1c8c947bec2f69ece26e8dc75b04a01}\index{File.c@{File.c}!ICU\_InterruptHandlerSet@{ICU\_InterruptHandlerSet}}
+\index{ICU\_InterruptHandlerSet@{ICU\_InterruptHandlerSet}!File.c@{File.c}}
+\doxysubsubsection{\texorpdfstring{ICU\_InterruptHandlerSet()}{ICU\_InterruptHandlerSet()}}
+{\footnotesize\ttfamily \label{_file_8c_aa1c8c947bec2f69ece26e8dc75b04a01} 
+uint8\+\_\+t ICU\+\_\+\+Interrupt\+Handler\+Set (\begin{DoxyParamCaption}\item[{ICU\+\_\+en\+Icu\+Interrupt\+Mode\+\_\+t}]{en\+\_\+icu\+Module\+Interrupt}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{interrupt\+Handler}{}\end{DoxyParamCaption})}
+
+
+
+Set interrupt handler for ICU Module. 
+
+This function sets interrupt handler for specified ICU Module. \begin{DoxyPrecond}{Precondition}
+
+\begin{DoxyEnumerate}
+\item Pointer must be different from NULL.
+\item ICU Module must be inside allowed Module number range. 
+\end{DoxyEnumerate}
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+
+\begin{DoxyEnumerate}
+\item Function sets interrupt handler function for specified ICU Module.
+\end{DoxyEnumerate}
+\end{DoxyPostcond}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em Module} & ICU Module \\
+\hline
+\mbox{\texttt{ in}}  & {\em interrupt\+Handler} & Pointer to callback function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+status Returns 0 if pointer to callback function is different from NULL, otherwise returns 1
+\end{DoxyReturn}
+{\bfseries{Example\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint32\_t\ mathAdd(uint16\_t\ f1,\ uint16\_t\ f2);}
+\DoxyCodeLine{}
+\DoxyCodeLine{uint32\_t\ mathAdd(uint16\_t\ f1,\ uint16\_t\ f2)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \textcolor{keywordflow}{return}\ (uint32\_t)(f1\ +\ f2);}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ uint8\_t\ status\ =\ \mbox{\hyperlink{_file_8c_aa1c8c947bec2f69ece26e8dc75b04a01}{ICU\_InterruptHandlerSet}}(ICU\_MODULE\_1,\ \&mathAdd);}
+
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See also}
+Device datasheet
+\end{DoxySeeAlso}
+~\newline
+{\bfseries{ -\/ HISTORY OF CHANGES -\/ }}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+Date &Software Version &Initials  &Description  \\\cline{1-4}
+28.\+02.\+2021. 15\+:09\+:10 (UTC+01\+:00) &1.\+0.\+0 &MK  &Interface Created  \\\cline{1-4}
+\end{longtabu}
+~\newline
+~\newline
+ \DoxyHorRuler{0}
+ \Hypertarget{_file_8c_a828e8f439991059b189e4a25a6aaaead}\index{File.c@{File.c}!ICU\_moduleCfg@{ICU\_moduleCfg}}
+\index{ICU\_moduleCfg@{ICU\_moduleCfg}!File.c@{File.c}}
+\doxysubsubsection{\texorpdfstring{ICU\_moduleCfg()}{ICU\_moduleCfg()}}
+{\footnotesize\ttfamily \label{_file_8c_a828e8f439991059b189e4a25a6aaaead} 
+void ICU\+\_\+module\+Cfg (\begin{DoxyParamCaption}\item[{ICU\+\_\+\+Modules\+\_\+t}]{en\+\_\+\+ICUModule}{}\end{DoxyParamCaption})}
+
+
+
+~\newline
+ 
+
+Requirement ID\+:PXM004-\/103507
+
+\begin{DoxyPrecond}{Precondition}
+CCPx configured as Input capture Mode 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+
+\end{DoxyPostcond}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em ICU\+\_\+\+Modules\+\_\+t} & en\+\_\+\+ICUModule \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+
+\end{DoxyReturn}
+{\bfseries{Example\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{ICU\_ModuleCfg\ (CCP\_MODULE\_1,}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ en\_IcuMode\ =\ ICU\_EDGE\_DETECT}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ en\_IcuClkSrc\ =\ ICU\_SYSTEM\_CLK)}
+
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See also}
+Device datasheet
+\end{DoxySeeAlso}
+~\newline
+{\bfseries{ -\/ HISTORY OF CHANGES -\/ }}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+Date &Software Version &Initials  &Description  \\\cline{1-4}
+12.\+04.\+2021. 22\+:13\+:26 (UTC+01\+:00) &1.\+0.\+0 &YOUR\+\_\+\+INITIALS  &Interface Created  \\\cline{1-4}
+\end{longtabu}
+~\newline
+~\newline
+ \DoxyHorRuler{0}
+ \Hypertarget{_file_8c_aeb42825d9071ebfa3f75b2bb2e20ac5f}\index{File.c@{File.c}!ICU\_OverflowInterruptHandlerSet@{ICU\_OverflowInterruptHandlerSet}}
+\index{ICU\_OverflowInterruptHandlerSet@{ICU\_OverflowInterruptHandlerSet}!File.c@{File.c}}
+\doxysubsubsection{\texorpdfstring{ICU\_OverflowInterruptHandlerSet()}{ICU\_OverflowInterruptHandlerSet()}}
+{\footnotesize\ttfamily \label{_file_8c_aeb42825d9071ebfa3f75b2bb2e20ac5f} 
+uint8\+\_\+t ICU\+\_\+\+Overflow\+Interrupt\+Handler\+Set (\begin{DoxyParamCaption}\item[{ICU\+\_\+\+Modules\+\_\+t}]{en\+\_\+\+ICUModule}{, }\item[{void \texorpdfstring{$\ast$}{*}}]{interrupt\+Handler}{}\end{DoxyParamCaption})}
+
+
+
+Set interrupt handler for ICU Timer Module. 
+
+This function sets interrupt handler for specified ICU Timer Module. \begin{DoxyPrecond}{Precondition}
+
+\begin{DoxyEnumerate}
+\item Pointer must be different from NULL.
+\item ICU Timer Module must be inside allowed Module number range. 
+\end{DoxyEnumerate}
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+
+\begin{DoxyEnumerate}
+\item Function sets interrupt handler function for specified ICU Module.
+\end{DoxyEnumerate}
+\end{DoxyPostcond}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\texttt{ in}}  & {\em Module} & ICU Timer Module \\
+\hline
+\mbox{\texttt{ in}}  & {\em interrupt\+Handler} & Pointer to callback function \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+status Returns 0 if pointer to callback function is different from NULL, otherwise returns 1
+\end{DoxyReturn}
+{\bfseries{Example\+:}} 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{uint32\_t\ mathAdd(uint16\_t\ f1,\ uint16\_t\ f2);}
+\DoxyCodeLine{}
+\DoxyCodeLine{uint32\_t\ mathAdd(uint16\_t\ f1,\ uint16\_t\ f2)}
+\DoxyCodeLine{\{}
+\DoxyCodeLine{\ \ \ \ \ \textcolor{keywordflow}{return}\ (uint32\_t)(f1\ +\ f2);}
+\DoxyCodeLine{\}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\ uint8\_t\ status\ =\ \mbox{\hyperlink{_file_8c_aeb42825d9071ebfa3f75b2bb2e20ac5f}{ICU\_OverflowInterruptHandlerSet}}(ICU\_MODULE\_1,\ \&mathAdd);}
+
+\end{DoxyCode}
+
+
+\begin{DoxySeeAlso}{See also}
+Device datasheet
+\end{DoxySeeAlso}
+~\newline
+{\bfseries{ -\/ HISTORY OF CHANGES -\/ }}
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{4}{|X[-1]}|}
+\hline
+Date &Software Version &Initials  &Description  \\\cline{1-4}
+28.\+02.\+2021. 15\+:09\+:10 (UTC+01\+:00) &1.\+0.\+0 &MK  &Interface Created  \\\cline{1-4}
+\end{longtabu}
+~\newline
+~\newline
+ \DoxyHorRuler{0}
+ 
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{_file_8c_a3272f9ccd5fa0575669f0043c8487e82}\index{File.c@{File.c}!str\_icuCfg@{str\_icuCfg}}
+\index{str\_icuCfg@{str\_icuCfg}!File.c@{File.c}}
+\doxysubsubsection{\texorpdfstring{str\_icuCfg}{str\_icuCfg}}
+{\footnotesize\ttfamily \label{_file_8c_a3272f9ccd5fa0575669f0043c8487e82} 
+ICU\+\_\+str\+Icu\+Configs\+\_\+t str\+\_\+icu\+Cfg\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+Array of structures to configure the ICU Modules. 
+
