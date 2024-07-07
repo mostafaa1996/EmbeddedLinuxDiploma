@@ -108,11 +108,11 @@ with open("./Python/Doxgen_parsingTask/html/_file_8c.html" , 'r') as file :
                 ParamIN_OUT_Desc= ParamIN_OUT.find_all("td")[-1].text.strip()
                 # print(ParamIN_OUT_dir , "\t\t" , ParamIN_OUT_Name , "\t\t" , ParamIN_OUT_Desc)
                 if(ParamIN_OUT_dir == "[in]"):
-                   Func["ParametersDes[in]"].append(f"({ParamIN_OUT_index}) " + ParamIN_OUT_Name + "\t" + ParamIN_OUT_Desc)
+                   Func["ParametersDes[in]"].append(f"({ParamIN_OUT_index}) " + ParamIN_OUT_Name + "  " + ParamIN_OUT_Desc)
                    Func["ParametersDes[out]"].append(" - ")
                    ParamIN_OUT_index += 1
                 elif(ParamIN_OUT_dir == "[out]"):
-                   Func["ParametersDes[out]"] = f"({ParamIN_OUT_index}) " + ParamIN_OUT_Name + "\t" + ParamIN_OUT_Desc
+                   Func["ParametersDes[out]"] = f"({ParamIN_OUT_index}) " + ParamIN_OUT_Name + "  " + ParamIN_OUT_Desc
                    Func["ParametersDes[in]"].append(" - ")
                 # print(Func["ParametersDes[in]"])
       ################################################################################################################
@@ -141,9 +141,35 @@ with open("./Python/Doxgen_parsingTask/html/_file_8c.html" , 'r') as file :
        }
       }
     pprint(ModuleFunc_list)
-    RowData["ModuleName"] = ModuleName
+    RowData["ModuleName"] = ModuleName 
     RowData["fileType"]   = ModuleType
     RowData["Functions"]   = ModuleFunc_list
-    Database = pandas.DataFrame(ModuleFunc_list)
-    Database.to_excel("./Python/Doxgen_parsingTask/DoxData.xlsx",Database)
+    
+    DataBasr_list = []
+    for x in RowData["Functions"]:
+       temp = {}
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"FunctionName")]       = x["FunctionName"]
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"return")]             =  x["return"] 
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"ReturnDes")]          = x["ReturnDes"]
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"Params")]             = "\n".join(x["Params"]) 
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"ParametersDes[in]")]  = "\n".join(x["ParametersDes[in]"])
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"ParametersDes[out]")] = "\n".join(x["ParametersDes[out]"])
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"Precondition")]       = x["Precondition"] 
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"Postcondition")]      = x["Postcondition"]
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"Description")]        = x["Description"]
+       temp_str = ""
+       for k in x["HistoryOfChanges"].keys():
+          t = x["HistoryOfChanges"].get(k)
+          temp_str += f"{k} : {t} \n"
+       
+       temp[(RowData["ModuleName"] ,RowData["fileType"] ,"HistoryOfChanges")] = temp_str
+       DataBasr_list.append(temp)
+
+    Database = pandas.DataFrame(DataBasr_list)
+
+    # Ensuring MultiIndex
+    multiindex = pandas.MultiIndex.from_tuples(Database.columns, names=['ModuleName', 'fileType' ,'Attribute'])
+    Database.columns = multiindex
+
+    Database.to_excel("./Python/Doxgen_parsingTask/DoxData.xlsx")
       
