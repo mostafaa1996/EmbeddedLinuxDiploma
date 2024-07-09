@@ -135,6 +135,6 @@ Next_button.pack(side ="left" , pady = 10 , padx = 10 )
 Generate_button = ctk.CTkButton(master=Progress_frame , text="Generate" , font=("Arial", 16, "bold"),
                             corner_radius=15 , width= 50 , height=25 , state="disabled" , command=Next_ButtonAction)
 Generate_button.pack(side ="left" , pady = 10 )
-##########################################################
+#############################################################
 
 root.mainloop()
