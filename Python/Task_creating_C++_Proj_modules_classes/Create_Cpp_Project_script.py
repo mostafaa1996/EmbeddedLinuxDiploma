@@ -121,7 +121,7 @@ def Generation():
                         for mod_Data in mod["Data"]:
                             FC.writelines(f"{mod_Data}\n")
                         for mod_Func in mod["Functions"]:
-                            F.writelines(f"{mod_Func}")
+                            FC.writelines(f"{mod_Func}")
                             FC.write("{\n} \n\n")
 
                    Module_index+=1
@@ -151,7 +151,7 @@ def Generation():
                            for dataInType in cl["Data_members"].values() :
                                for data in dataInType:
                                    ParameterizeList.append(data[0 : data.find("=")])
-                                   temp_str = ((data[0 : data.find("=")]).split(" "))[-1]
+                                   temp_str = ((data[0 : data.find("=")].strip()).split(" "))[-1]
                                    ElementsList.append(temp_str)
                            ParameterizeList_str = ",".join(ParameterizeList)
                            F.write(f"{class_name} ({ParameterizeList_str}) : ")
@@ -197,7 +197,7 @@ def Generation():
                                 temp_str = class_Func[0:PosOffirstPartInParam] # unsigned int x
                                 List_temp_str = temp_str.split(" ") # ['unsigned' , 'int' ,  'x']
                                 funcName = List_temp_str[-1] # x
-                                PosOffuncName = class_Func.find("funcName")
+                                PosOffuncName = class_Func.find(funcName)
                                 class_Func_Modified = class_Func[:PosOffuncName] + InsertionString + class_Func[PosOffuncName:]
                                 # ParamString = class_Func[class_Func.find("(") : ]
                                 FC.write(f"{class_Func_Modified}")

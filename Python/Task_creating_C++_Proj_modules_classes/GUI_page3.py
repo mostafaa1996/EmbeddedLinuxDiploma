@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
-from GUI_BaseDesign import BaseDesign , Class , Module
+from GUI_BaseDesign import BaseDesign 
+import Create_Cpp_Project_script as CPPCreator
 from GUI_page4 import Page4
 
 
@@ -151,14 +152,14 @@ class Page3(BaseDesign):
     
     def Next_ButtonAction(self):
         if self.FileType == "Module":
-            Module["Data"] = self.DataContainer.get(0,tk.END)
+            CPPCreator.Module["Data"] = self.DataContainer.get(0,tk.END)
         elif self.FileType == "Class":
             DataContainerList = self.DataContainer.get(0, tk.END)
             if len(DataContainerList)> 0:
-                Class["Constructors"] = ['1' , '2']
+                CPPCreator.Class["Constructors"] = ['1' , '2']
             i=0
             for Datascope in self.scope_list :
-                Class["Data_members"][Datascope].append(DataContainerList[i])
+                CPPCreator.Class["Data_members"][Datascope].append(DataContainerList[i])
                 i+=1
         self.Page3_destroy()
         page4_instance = Page4("normal" , "disabled")

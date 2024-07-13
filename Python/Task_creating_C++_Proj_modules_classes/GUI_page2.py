@@ -1,6 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
-from GUI_BaseDesign import BaseDesign , Configuration_container , Class , Module
+from GUI_BaseDesign import BaseDesign , Configuration_container
+import Create_Cpp_Project_script as CppCreation
 from GUI_page3 import Page3
 
 class Page2(BaseDesign) :
@@ -49,9 +50,9 @@ class Page2(BaseDesign) :
     def ClassModuleNamePath(self):
         name = self.FileName_TextBox.get("1.0" , "end-1c")
         if self.FileType == "Class":
-            Class["ClassName"] = name
+            CppCreation.Class["ClassName"] = name
         elif self.FileType == "Module":
-            Module["Name"] = name
+            CppCreation.Module["Name"] = name
         MainPath = self.Path_TextBox.get("1.0","end-1c")
         while "\\" in MainPath:
             MainPath = MainPath.replace("\\", "/")   

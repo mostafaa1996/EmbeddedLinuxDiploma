@@ -167,14 +167,15 @@ class Page4(BaseDesign):
     def Next_ButtonAction(self):
         if self.FileType == "Module":
             CppCreation.Module["Functions"] = self.functionContainer.get(0, tk.END)
+            CppCreation.Configuration_container["Modules"].append(CppCreation.Module.copy())
         elif self.FileType == "Class":
             i=0
             Func_list = self.functionContainer.get(0, tk.END)
             for Datascope in self.scope_list :
                 CppCreation.Class["Method_members"][Datascope].append(Func_list[i])
                 i+=1
-        CppCreation.Configuration_container["Classes"].append(CppCreation.Class)
-        CppCreation.Configuration_container["Modules"].append(CppCreation.Module)
+            CppCreation.Configuration_container["Classes"].append(CppCreation.Class.copy())
+        self.Page4_destroy()
         CppCreation.Class = {
             "ClassName" : "" , 
             "Constructors" : [] , 
@@ -182,7 +183,6 @@ class Page4(BaseDesign):
             "Method_members" : {"private" : [] , "protected" : [] , "public" : []}
         }
         CppCreation.Module= {'Name' : "" ,"Data" : [] , "Functions" : []}
-        self.Page4_destroy()
         self.progressBarVal = 1
         page5_instance = Page5("normal" , "normal" , self.progressBarVal)
         pprint(CppCreation.Configuration_container)
