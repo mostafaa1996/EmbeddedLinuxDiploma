@@ -2,7 +2,7 @@ import tkinter as tk
 import customtkinter as ctk
 from PIL import Image, ImageTk
 import itertools
-
+import EmployeesDataBase_task as Em
 ############## Main Window Creation ##################
 root = ctk.CTk()
 root.geometry("500x600+400+400")
@@ -15,7 +15,7 @@ root.config(bg="white")
 # 1 column = 25 , 1 row = 25
 class BaseDesign():
     def __init__(self , ADDBtnEnable , GenerationBtnEnable , BackBtnState):
-        self.Reset_button = None
+        self.OpenExcel_button = None
         self.ADD_button = None
         self.GenerateExcel_button = None
         self.ReadExcel_button = None
@@ -70,15 +70,15 @@ class BaseDesign():
 
         self.LoadingProcess(self.spacer1_frame)
         
-        self.Reset_button = ctk.CTkButton(master=self.Progress_frame , text="Reset Item" , font=("Arial", 16, "bold") ,
-                            corner_radius=15 , width= 80 , height=30 , state=BackBtnState , command=self.Reset_ButtonAction)
-        self.Reset_button.pack(side ="left" , pady = 10)
+        self.OpenExcel_button = ctk.CTkButton(master=self.Progress_frame , text="Open sheet" , font=("Arial", 16, "bold") ,
+                            corner_radius=15 , width= 80 , height=30 , state=BackBtnState , command=self.openExcel_ButtonAction)
+        self.OpenExcel_button.pack(side ="left" , pady = 10)
 
         self.ADD_button  = ctk.CTkButton(master=self.Progress_frame , text="ADD Item" , font=("Arial", 16, "bold"),
                             corner_radius=15 , width= 80 , height=30 , state=ADDBtnEnable , command=self.ADD_ButtonAction)
         self.ADD_button.pack(side ="left" , pady = 10 , padx = 10 )
 
-        self.GenerateExcel_button = ctk.CTkButton(master=self.Progress_frame , text="Generate Excel" , font=("Arial", 16, "bold"),
+        self.GenerateExcel_button = ctk.CTkButton(master=self.Progress_frame , text="Generate New Excel" , font=("Arial", 16, "bold"),
                                     corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Generate_ButtonAction)
         self.GenerateExcel_button.pack(side ="left" , pady = 10 )
 
@@ -96,16 +96,16 @@ class BaseDesign():
 
         self.LoadingProcess(self.spacer2_frame)
 
-        self.ReadExcel_button = ctk.CTkButton(master=self.ModificationFrame , text="Read Excel" , font=("Arial", 16, "bold"),
-                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Generate_ButtonAction)
+        self.ReadExcel_button = ctk.CTkButton(master=self.ModificationFrame , text="Read From Excel" , font=("Arial", 16, "bold"),
+                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Read_ButtonAction)
         self.ReadExcel_button.pack(side ="left" , pady = 10 )
 
         self.Delete_button = ctk.CTkButton(master=self.ModificationFrame , text="Delete Item" , font=("Arial", 16, "bold"),
-                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Generate_ButtonAction)
+                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Delete_ButtonAction)
         self.Delete_button.pack(side ="left" , pady = 10 , padx = 10)
 
         self.Modify_button = ctk.CTkButton(master=self.ModificationFrame , text="Modify Item" , font=("Arial", 16, "bold"),
-                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Generate_ButtonAction)
+                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Modify_ButtonAction)
         self.Modify_button.pack(side ="left" , pady = 10 )
 
 
@@ -113,7 +113,7 @@ class BaseDesign():
         pass
     def Generate_ButtonAction():
         pass
-    def Reset_ButtonAction():
+    def openExcel_ButtonAction():
         pass
     def Read_ButtonAction():
         pass
@@ -156,6 +156,7 @@ class Core_design(BaseDesign):
         self.IDTrueSign = None
         self.SalaryTrueSign = None
         self.arrayOfLabelsWithTrueSign = []
+        self.PlusBtn = None
         self.Core_design_Creator()
 
     def Core_design_Creator(self):
@@ -175,6 +176,9 @@ class Core_design(BaseDesign):
         self.EmployeeSalaryFrame = tk.Frame(master=self.EmployeeFrame  , bg= "white" , width=550 , height=40 )
         self.EmployeeSalaryFrame.pack(anchor='w')
         self.EmployeeSalaryFrame.pack_propagate(False)
+        self.PlusBtn = ctk.CTkButton(master=self.EmployeeFrame , width= 40 , height=40 , text= "+" , 
+                                     font=("Helvetica", 16, "bold") , command=self.PlusBtnEvent , state="disabled")
+        self.PlusBtn.pack(padx = 10 , anchor = 'w')
         
         self.EmployeeName_label     = tk.Label(master=self.EmployeeNameFrame , text = "Employee Name" , font= ("Helvetica", 12, "bold"), bg= "white")
         self.EmployeeTitle_label    = tk.Label(master=self.EmployeeTitleFrame , text = "Employee Title" , font= ("Helvetica", 12, "bold"), bg= "white")
@@ -208,17 +212,33 @@ class Core_design(BaseDesign):
         self.arrayOfTextBoxes[0].bind("<Control_L>", self.TextBoxAction)
 
     def ADD_ButtonAction(self):
-        pass
+        Em.AddItemToexisting_Excel()
     def Generate_ButtonAction(self):
-        pass
-    def Reset_ButtonAction(self):
-        pass
+        Em.Generate_Excel()
+    def openExcel_ButtonAction(self):
+        Em.Open_Excel()
     def Read_ButtonAction(self):
-        pass
+        Em.Read_Excel()
     def Delete_ButtonAction(self):
-        pass
+        Em.RemoveItemsIn_Excel
     def Modify_ButtonAction(self):
-        pass 
+        Em.ModifyItemsIn_Excel() 
+
+    def PlusBtnEvent(self):
+        Em.Employee_Info["Name"] = self.EmployeeName_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["Title"] = self.EmployeeTitle_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["ID"] = self.EmployeeID_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["Salary"] = self.EmployeeSalary_TextBox.get("1.0" , "end-1c")
+        self.EmployeeName_TextBox.delete("1.0","end-1c")
+        self.EmployeeTitle_TextBox.delete("1.0","end-1c")
+        self.EmployeeID_TextBox.delete("1.0","end-1c")
+        self.EmployeeSalary_TextBox.delete("1.0","end-1c")
+        self.arrayOfTextBoxesIndex = 0
+        for i in self.arrayOfLabelsWithTrueSign:
+            i.config(image="")
+        self.GenerateExcel_button.configure(state = "normal")
+        self.ADD_button.configure(state = "normal")
+
     def TextBoxAction(self , event=None):
         if(self.arrayOfTextBoxesIndex < len(self.arrayOfTextBoxes)-1):
             self.arrayOfTextBoxes[self.arrayOfTextBoxesIndex+1].bind("<Control_L>", self.TextBoxAction)
@@ -227,11 +247,14 @@ class Core_design(BaseDesign):
             self.arrayOfLabelsWithTrueSign[self.arrayOfTextBoxesIndex].config(image=self.TrueSign_img)
             self.arrayOfLabelsWithTrueSign[self.arrayOfTextBoxesIndex].pack(anchor='e' , side= "left" , padx= 10)
         self.arrayOfTextBoxesIndex+=1
+        self.Delete_button.configure(state = "normal")
+        self.Modify_button.configure(state = "normal")
+        self.ReadExcel_button.configure(state = "normal")
+        self.PlusBtn.configure(state = "normal")
         if(self.arrayOfTextBoxesIndex == 4):
             self.arrayOfTextBoxesIndex = 0
-            self.GenerateExcel_button.configure(state = "normal")
-            self.ADD_button.configure(state = "normal")
+            
 
         
-design = Core_design("disabled" , "disabled" , "normal")
+UI = Core_design("disabled" , "disabled" , "normal")
 root.mainloop()
