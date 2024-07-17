@@ -3,9 +3,10 @@ import customtkinter as ctk
 from PIL import Image, ImageTk
 import itertools
 import EmployeesDataBase_task as Em
+from time import sleep
 ############## Main Window Creation ##################
 root = ctk.CTk()
-root.geometry("500x600+400+400")
+root.geometry("500x600+200+200")
 root.title("Employees DataBase Reader/Creator")
 ctk.set_appearance_mode("system")
 root.resizable(width=False , height=False)
@@ -27,6 +28,7 @@ class BaseDesign():
         self.loadingRead_label = None
         self.loadingWriting_label = None
         self.TrueSign_img = ImageTk.PhotoImage(Image.open("./Python/EmployeesDataBase/TrueSign.png").resize((30, 30)))
+        self.openedExistedExcelFlag = False
         self.BaseCreation(ADDBtnEnable , GenerationBtnEnable , BackBtnState)
 
     def BaseCreation(self , ADDBtnEnable ,GenerationBtnEnable , BackBtnState):
@@ -97,15 +99,15 @@ class BaseDesign():
         self.LoadingProcess(self.spacer2_frame)
 
         self.ReadExcel_button = ctk.CTkButton(master=self.ModificationFrame , text="Read From Excel" , font=("Arial", 16, "bold"),
-                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Read_ButtonAction)
+                                    corner_radius=15 , width= 80 , height=30 , state="normal" , command=self.Read_ButtonAction)
         self.ReadExcel_button.pack(side ="left" , pady = 10 )
 
         self.Delete_button = ctk.CTkButton(master=self.ModificationFrame , text="Delete Item" , font=("Arial", 16, "bold"),
-                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Delete_ButtonAction)
+                                    corner_radius=15 , width= 80 , height=30 , state="disabled" , command=self.Delete_ButtonAction)
         self.Delete_button.pack(side ="left" , pady = 10 , padx = 10)
 
         self.Modify_button = ctk.CTkButton(master=self.ModificationFrame , text="Modify Item" , font=("Arial", 16, "bold"),
-                                    corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Modify_ButtonAction)
+                                    corner_radius=15 , width= 80 , height=30 , state="disabled" , command=self.Modify_ButtonAction)
         self.Modify_button.pack(side ="left" , pady = 10 )
 
 
@@ -156,7 +158,9 @@ class Core_design(BaseDesign):
         self.IDTrueSign = None
         self.SalaryTrueSign = None
         self.arrayOfLabelsWithTrueSign = []
+        self.focusedTextBoxes = []
         self.PlusBtn = None
+        self.CurrentTextBoxAccessed = None
         self.Core_design_Creator()
 
     def Core_design_Creator(self):
@@ -184,6 +188,7 @@ class Core_design(BaseDesign):
         self.EmployeeTitle_label    = tk.Label(master=self.EmployeeTitleFrame , text = "Employee Title" , font= ("Helvetica", 12, "bold"), bg= "white")
         self.EmployeeID_label       = tk.Label(master=self.EmployeeIDFrame , text = "Employee ID" , font= ("Helvetica", 12, "bold"), bg= "white")
         self.EmployeeSalar_label    = tk.Label(master=self.EmployeeSalaryFrame , text = "Employee Salar" , font= ("Helvetica", 12, "bold"), bg= "white")
+
         self.EmployeeName_TextBox   = ctk.CTkTextbox(master=self.EmployeeNameFrame , width= 200 , height= 5  
                                                      , wrap="word" , border_color= "black" , border_width=2)
         self.EmployeeName_TextBox.focus_set()
@@ -195,6 +200,8 @@ class Core_design(BaseDesign):
                                                      , wrap="word", border_color= "black" , border_width=2 )
         self.arrayOfTextBoxes = [self.EmployeeName_TextBox , self.EmployeeTitle_TextBox 
                                  , self.EmployeeID_TextBox , self.EmployeeSalary_TextBox]
+        self.focusedTextBoxes = [".!ctkframe3.!frame.!frame.!ctktextbox.!text" , ".!ctkframe3.!frame.!frame2.!ctktextbox.!text" ,
+                                 ".!ctkframe3.!frame.!frame3.!ctktextbox.!text" , ".!ctkframe3.!frame.!frame4.!ctktextbox.!text"]
         self.EmployeeName_label    .pack(anchor='w', padx= 10 , side= "left")
         self.EmployeeTitle_label   .pack(anchor='w', padx= 10 , side= "left")
         self.EmployeeID_label      .pack(anchor='w', padx= 10 , side= "left")
@@ -209,14 +216,27 @@ class Core_design(BaseDesign):
         self.IDTrueSign = tk.Label(master=self.EmployeeIDFrame ,  bg= "white" , fg="white")
         self.SalaryTrueSign = tk.Label(master=self.EmployeeSalaryFrame , bg= "white" , fg="white")
         self.arrayOfLabelsWithTrueSign = [self.NameTrueSign , self.TitleTrueSign , self.IDTrueSign , self.SalaryTrueSign]
-        self.arrayOfTextBoxes[0].bind("<Control_L>", self.TextBoxAction)
+        k = 0
+        for i in self.arrayOfTextBoxes :
+            i.bind("<Key>", self.TextBoxAction)
+            i.bind("<FocusIn>" , self.NextFocus)
+            self.arrayOfLabelsWithTrueSign[k].pack(anchor='e' , side= "left" , padx= 10)
+            k+=1
+           
 
     def ADD_ButtonAction(self):
         Em.AddItemToexisting_Excel()
     def Generate_ButtonAction(self):
         Em.Generate_Excel()
     def openExcel_ButtonAction(self):
-        Em.Open_Excel()
+        if(self.openedExistedExcelFlag == False):
+            Em.Open_Excel()
+            self.OpenExcel_button.configure(text = "appendToOpenedExcel" , font = ("Arial", 12, "bold"))
+            self.openedExistedExcelFlag = True
+        if(self.openedExistedExcelFlag == True):
+            Em.appendToOpenedExcel()
+            self.OpenExcel_button.configure(text = "Open sheet" , font = ("Arial", 16, "bold"))
+            self.openedExistedExcelFlag = False
     def Read_ButtonAction(self):
         Em.Read_Excel()
     def Delete_ButtonAction(self):
@@ -225,10 +245,10 @@ class Core_design(BaseDesign):
         Em.ModifyItemsIn_Excel() 
 
     def PlusBtnEvent(self):
-        Em.Employee_Info["Name"] = self.EmployeeName_TextBox.get("1.0" , "end-1c")
-        Em.Employee_Info["Title"] = self.EmployeeTitle_TextBox.get("1.0" , "end-1c")
-        Em.Employee_Info["ID"] = self.EmployeeID_TextBox.get("1.0" , "end-1c")
-        Em.Employee_Info["Salary"] = self.EmployeeSalary_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info[('Employees Information',"Name")] = self.EmployeeName_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info[('Employees Information',"Title")] = self.EmployeeTitle_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info[('Employees Information',"ID")] = self.EmployeeID_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info[('Employees Information',"Salary")] = self.EmployeeSalary_TextBox.get("1.0" , "end-1c")
         self.EmployeeName_TextBox.delete("1.0","end-1c")
         self.EmployeeTitle_TextBox.delete("1.0","end-1c")
         self.EmployeeID_TextBox.delete("1.0","end-1c")
@@ -240,20 +260,35 @@ class Core_design(BaseDesign):
         self.ADD_button.configure(state = "normal")
 
     def TextBoxAction(self , event=None):
-        if(self.arrayOfTextBoxesIndex < len(self.arrayOfTextBoxes)-1):
-            self.arrayOfTextBoxes[self.arrayOfTextBoxesIndex+1].bind("<Control_L>", self.TextBoxAction)
-            self.arrayOfTextBoxes[self.arrayOfTextBoxesIndex+1].focus_set()
-        if(self.arrayOfTextBoxes[self.arrayOfTextBoxesIndex].get("1.0","end-1c") != ""):
-            self.arrayOfLabelsWithTrueSign[self.arrayOfTextBoxesIndex].config(image=self.TrueSign_img)
-            self.arrayOfLabelsWithTrueSign[self.arrayOfTextBoxesIndex].pack(anchor='e' , side= "left" , padx= 10)
-        self.arrayOfTextBoxesIndex+=1
-        self.Delete_button.configure(state = "normal")
-        self.Modify_button.configure(state = "normal")
-        self.ReadExcel_button.configure(state = "normal")
-        self.PlusBtn.configure(state = "normal")
-        if(self.arrayOfTextBoxesIndex == 4):
-            self.arrayOfTextBoxesIndex = 0
+        if(self.CurrentTextBoxAccessed.get("1.0","end-1c") != "" or 
+           self.CurrentTextBoxAccessed.get("1.0","end-1c") != " "):
             
+            indexOfLabel = self.arrayOfTextBoxes.index(self.CurrentTextBoxAccessed)
+            self.arrayOfLabelsWithTrueSign[indexOfLabel].config(image=self.TrueSign_img)
+            
+            self.Delete_button.configure(state = "normal")
+            self.Modify_button.configure(state = "normal")
+            self.PlusBtn.configure(state = "normal")
+        
+        if(self.CurrentTextBoxAccessed.get("1.0","end-1c") == "" or 
+           self.CurrentTextBoxAccessed.get("1.0","end-1c") == " ") : 
+            
+            indexOfLabel = self.arrayOfTextBoxes.index(self.CurrentTextBoxAccessed)
+            self.arrayOfLabelsWithTrueSign[indexOfLabel].config(image="")
+            DisableBtns = 0
+            for i in self.arrayOfTextBoxes:
+                if (i.get("1.0","end-1c")=="" or i.get("1.0","end-1c")==" "):
+                    DisableBtns+=1
+            if(DisableBtns == 4):
+                self.Delete_button.configure(state = "disabled")
+                self.Modify_button.configure(state = "disabled")
+                self.PlusBtn.configure(state = "disabled")
+        
+    def NextFocus(self , event=None):
+        focused_widget = root.focus_get()
+        sstr = str(focused_widget)
+        index = self.focusedTextBoxes.index(sstr)
+        self.CurrentTextBoxAccessed = self.arrayOfTextBoxes[index]
 
         
 UI = Core_design("disabled" , "disabled" , "normal")
