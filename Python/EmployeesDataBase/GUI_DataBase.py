@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import itertools
 import EmployeesDataBase_task as Em
 from time import sleep
+from tkinter import filedialog as fd
 ############## Main Window Creation ##################
 root = ctk.CTk()
 root.geometry("500x600+200+200")
@@ -76,9 +77,9 @@ class BaseDesign():
                             corner_radius=15 , width= 80 , height=30 , state=BackBtnState , command=self.openExcel_ButtonAction)
         self.OpenExcel_button.pack(side ="left" , pady = 10)
 
-        self.ADD_button  = ctk.CTkButton(master=self.Progress_frame , text="ADD Item" , font=("Arial", 16, "bold"),
-                            corner_radius=15 , width= 80 , height=30 , state=ADDBtnEnable , command=self.ADD_ButtonAction)
-        self.ADD_button.pack(side ="left" , pady = 10 , padx = 10 )
+        # self.ADD_button  = ctk.CTkButton(master=self.Progress_frame , text="ADD Item" , font=("Arial", 16, "bold"),
+        #                     corner_radius=15 , width= 80 , height=30 , state=ADDBtnEnable , command=self.ADD_ButtonAction)
+        # self.ADD_button.pack(side ="left" , pady = 10 , padx = 10 )
 
         self.GenerateExcel_button = ctk.CTkButton(master=self.Progress_frame , text="Generate New Excel" , font=("Arial", 16, "bold"),
                                     corner_radius=15 , width= 80 , height=30 , state=GenerationBtnEnable , command=self.Generate_ButtonAction)
@@ -224,31 +225,49 @@ class Core_design(BaseDesign):
             k+=1
            
 
-    def ADD_ButtonAction(self):
-        Em.AddItemToexisting_Excel()
+    # def ADD_ButtonAction(self):
+    #     Em.AddItemToexisting_Excel()
     def Generate_ButtonAction(self):
-        Em.Generate_Excel()
+        Em.Generate_Excel(name= None , Data=Em.Employees_list_ToBe_write)
     def openExcel_ButtonAction(self):
         if(self.openedExistedExcelFlag == False):
             Em.Open_Excel()
-            self.OpenExcel_button.configure(text = "appendToOpenedExcel" , font = ("Arial", 12, "bold"))
+            self.OpenExcel_button.configure(text = "appendData" , font = ("Arial", 12, "bold"))
             self.openedExistedExcelFlag = True
-        if(self.openedExistedExcelFlag == True):
+        elif(self.openedExistedExcelFlag == True):
             Em.appendToOpenedExcel()
             self.OpenExcel_button.configure(text = "Open sheet" , font = ("Arial", 16, "bold"))
             self.openedExistedExcelFlag = False
     def Read_ButtonAction(self):
         Em.Read_Excel()
     def Delete_ButtonAction(self):
-        Em.RemoveItemsIn_Excel
+        if((self.EmployeeName_TextBox != "" and self.EmployeeName_TextBox != " ")
+           or (self.EmployeeID_TextBox != "" and self.EmployeeID_TextBox != " ")):
+            info = {"Name" : self.EmployeeName_TextBox.get("1.0" , "end-1c")
+                    ,"ID"  : self.EmployeeID_TextBox.get("1.0" , "end-1c")}
+            Em.RemoveItem(info)
+
     def Modify_ButtonAction(self):
-        Em.ModifyItemsIn_Excel() 
+        info = {     
+                 "Name"   : self.EmployeeName_TextBox.get("1.0" , "end-1c")
+                ,"ID"     : self.EmployeeID_TextBox.get("1.0" , "end-1c")
+                ,"Title"  : self.EmployeeTitle_TextBox.get("1.0" , "end-1c")
+                ,"Salary" : self.EmployeeSalary_TextBox.get("1.0" , "end-1c")
+               }
+        self.EmployeeName_TextBox.delete("1.0","end-1c")
+        self.EmployeeTitle_TextBox.delete("1.0","end-1c")
+        self.EmployeeID_TextBox.delete("1.0","end-1c")
+        self.EmployeeSalary_TextBox.delete("1.0","end-1c")
+        for i in self.arrayOfLabelsWithTrueSign:
+            i.config(image="")
+        
+        Em.ModifyItemsIn_Excel(info) 
 
     def PlusBtnEvent(self):
-        Em.Employee_Info[('Employees Information',"Name")] = self.EmployeeName_TextBox.get("1.0" , "end-1c")
-        Em.Employee_Info[('Employees Information',"Title")] = self.EmployeeTitle_TextBox.get("1.0" , "end-1c")
-        Em.Employee_Info[('Employees Information',"ID")] = self.EmployeeID_TextBox.get("1.0" , "end-1c")
-        Em.Employee_Info[('Employees Information',"Salary")] = self.EmployeeSalary_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["Name"] = self.EmployeeName_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["Title"] = self.EmployeeTitle_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["ID"] = self.EmployeeID_TextBox.get("1.0" , "end-1c")
+        Em.Employee_Info["Salary"] = self.EmployeeSalary_TextBox.get("1.0" , "end-1c")
         self.EmployeeName_TextBox.delete("1.0","end-1c")
         self.EmployeeTitle_TextBox.delete("1.0","end-1c")
         self.EmployeeID_TextBox.delete("1.0","end-1c")
@@ -257,7 +276,8 @@ class Core_design(BaseDesign):
         for i in self.arrayOfLabelsWithTrueSign:
             i.config(image="")
         self.GenerateExcel_button.configure(state = "normal")
-        self.ADD_button.configure(state = "normal")
+        # self.ADD_button.configure(state = "normal")
+        Em.AddItemToexisting_Excel()
 
     def TextBoxAction(self , event=None):
         if(self.CurrentTextBoxAccessed.get("1.0","end-1c") != "" or 
