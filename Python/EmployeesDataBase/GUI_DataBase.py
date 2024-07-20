@@ -10,7 +10,7 @@ root = ctk.CTk()
 root.geometry("500x600+200+200")
 root.title("Employees DataBase Reader/Creator")
 ctk.set_appearance_mode("system")
-root.resizable(width=False , height=False)
+root.resizable(width=True , height=True)
 root.config(bg="white")
 
 ######################################################
@@ -30,6 +30,7 @@ class BaseDesign():
         self.loadingWriting_label = None
         self.TrueSign_img = ImageTk.PhotoImage(Image.open("./Python/EmployeesDataBase/TrueSign.png").resize((30, 30)))
         self.openedExistedExcelFlag = False
+        self.ReadExistedExcelFlag = False
         self.BaseCreation(ADDBtnEnable , GenerationBtnEnable , BackBtnState)
 
     def BaseCreation(self , ADDBtnEnable ,GenerationBtnEnable , BackBtnState):
@@ -238,8 +239,37 @@ class Core_design(BaseDesign):
             Em.appendToOpenedExcel()
             self.OpenExcel_button.configure(text = "Open sheet" , font = ("Arial", 16, "bold"))
             self.openedExistedExcelFlag = False
+    
     def Read_ButtonAction(self):
-        Em.Read_Excel()
+            if(self.ReadExistedExcelFlag == False):
+                Em.Read_Excel()
+                self.ReadExcel_button.configure(text = "Show Item" , font = ("Arial", 12, "bold"))
+                self.ReadExistedExcelFlag = True
+                root.geometry("500x720")
+                self.showFrame = tk.Frame(master=root , bg="white" , width= 300 , height= 100 , relief="groove" , borderwidth = 3 )
+                self.showFrame.grid(row = 26 , rowspan=4 , column = 0 , columnspan = 20 , sticky = "we" , pady=5 , padx=20)
+                self.ShowContentList = tk.Listbox(master=self.showFrame ,width=90 , height=8 , bg= "white" , font=("Arial", 7, "bold"))
+                self.ShowContentList.pack(pady=5, padx=10)
+                self.ShowContentList.insert(tk.END,f"Employee Info :")
+            elif(self.ReadExistedExcelFlag  == True):
+                if((self.EmployeeName_TextBox.get("1.0","end-1c") != "" and self.EmployeeName_TextBox.get("1.0","end-1c") != " ")or
+                (self.EmployeeID_TextBox.get("1.0","end-1c") != "" and self.EmployeeID_TextBox.get("1.0","end-1c") != " ")):
+                    Info = {}
+                    for i in Em.Employees_list_ToBe_Read:
+                        if(self.EmployeeName_TextBox.get("1.0","end-1c").lower() == i["Name"].lower()
+                            or self.EmployeeID_TextBox.get("1.0","end-1c") == i["ID"]):
+                           Info = i
+                           name = Info["Name"]  
+                           id = Info["ID"]
+                           title = Info["Title"]
+                           salary = Info["Salary"]                
+                           self.ShowContentList.insert(tk.END,f"Name : {name} / Title : {title} / ID : {id} / Salary : {salary}")
+                    # self.ShowContentList.insert(tk.END,f"Title : {title}")
+                    # self.ShowContentList.insert(tk.END,f"ID : {id}")
+                    # self.ShowContentList.insert(tk.END,f"Salary : {salary}")
+                    
+
+
     def Delete_ButtonAction(self):
         if((self.EmployeeName_TextBox != "" and self.EmployeeName_TextBox != " ")
            or (self.EmployeeID_TextBox != "" and self.EmployeeID_TextBox != " ")):
