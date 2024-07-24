@@ -1,0 +1,12 @@
+#include "Dio.h" 
+
+void DIOInit(){
+    DDRA = 0b00000000
+    PORTA = 0b00000000
+    DDRB = 0b00000000
+    PORTB = 0b00000000
+    DDRC = 0b00000000
+    PORTC = 0b00000000
+    DDRD = 0b00000000
+    PORTD = 0b00000000
+}
